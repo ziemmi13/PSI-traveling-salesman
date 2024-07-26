@@ -3,11 +3,12 @@ from dfs import dfs
 from bfs import bfs
 from nn import nn
 from ni import ni
+from a_star import a_star
 import time
 
 # Dane problemu 
 num_cities = 6
-problem_type = "symmetrical"
+problem_type = "symmetrical" # or 'asymmetrical'
 starting_city = "C"
 percent_connections = 100
 random_seed = 254472
@@ -55,10 +56,29 @@ print("")
 # Starting the ni
 print("Starting ni")
 start_ni = time.time()
-ni(starting_city, cities_dict, print_details=True)
+ni(starting_city, cities_dict, print_details=False)
 end_ni = time.time()
 ni_time = end_ni - start_ni
 print(f"Valid path found in {ni_time:.10f}s")
+print("")
+
+# Starting the a* - nearest
+print("Starting a* with heuristic = 'nearest'")
+start_a_star1 = time.time()
+a_star(starting_city, cities_dict, heuristic_type = "nearest", print_details=False)
+end_a_star1 = time.time()
+a_star_time1 = end_a_star1 - start_a_star1
+print(f"Valid path found in {a_star_time1:.10f}s")
+print("")
+
+# Starting the a* - average
+print("Starting a* with heuristic = 'average'")
+start_a_star2 = time.time()
+a_star(starting_city, cities_dict, heuristic_type = "average", print_details=False)
+end_a_star2 = time.time()
+a_star_time2 = end_a_star2 - start_a_star2
+print(f"Valid path found in {a_star_time2:.10f}s")
+
 
 # add:
 # nonsymetrical problem test wtf is that all about

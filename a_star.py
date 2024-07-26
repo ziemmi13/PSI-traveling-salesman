@@ -1,25 +1,15 @@
-import heapq
 import numpy as np
 from Cities import allCities
 
+import heapq
+import numpy as np
 
 def euclidean_distance(city1_coordinates, city2_coordinates):
     return np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
 
 def nearest_city_heuristic(current_city_coordinates, unvisited_cities, cities_dict):
     """
-    Nieadmisowalna heurystyka (inadmissible heuristic)
-    Ta heurystyka oblicza minimalną odległość do najbliższego nieodwiedzonego miasta.
-    Jest podatna na przeszacowanie rzeczywistego kosztu pozostałej trasy, ponieważ skupia się tylko na najbliższym mieście, 
-    a nie na całkowitym koszcie podróży.
-    
-    Args:
-        current_city_coordinates (list): Koordynaty obecnego miasta.
-        unvisited_cities (list): Lista nieodwiedzonych miast.
-        cities_dict (dict): Słownik zawierający dane wszystkich miast, ich koordynaty oraz sąsiadów.
-
-    Returns:
-        float: Minimalna odległość do najbliższego nieodwiedzonego miasta.
+    Inadmissable heuristic - prone to overastimate the real cost of the path
     """
     if not unvisited_cities:
         return 0
@@ -32,19 +22,8 @@ def nearest_city_heuristic(current_city_coordinates, unvisited_cities, cities_di
     return min_distance
 
 def average_distance_heuristic(current_city_coordinates, visited_cities, total_distance, cities_dict):
-    """
-    Admisowalna heurystyka (admissible heuristic)
-    Ta heurystyka oblicza średnią odległość na podstawie przebytej już trasy.
-    Jest admisowalna, ponieważ nigdy nie przeszacowuje rzeczywistego kosztu pozostałej trasy.
-    
-    Args:
-        current_city_coordinates (list): Koordynaty obecnego miasta.
-        visited_cities (list): Lista odwiedzonych miast.
-        total_distance (float): Całkowita odległość przebyta do tej pory.
-        cities_dict (dict): Słownik zawierający dane wszystkich miast, ich koordynaty oraz sąsiadów.
-
-    Returns:
-        float: Szacunkowy koszt pozostałej trasy.
+    """"
+    Admissable heuristic - doesn't overastimate the real cost of the path
     """
     num_visited_edges = len(visited_cities) - 1
     if num_visited_edges == 0:
@@ -55,18 +34,6 @@ def average_distance_heuristic(current_city_coordinates, visited_cities, total_d
     return average_distance * estimated_remaining_edges
 
 def a_star(starting_city, cities_dict, heuristic_type='nearest', print_details=False):
-    """
-    Algorytm A* do znalezienia najkrótszej trasy dla problemu komiwojażera (TSP).
-    
-    Args:
-        starting_city (str): Nazwa miasta początkowego.
-        cities_dict (dict): Słownik zawierający dane wszystkich miast, ich koordynaty oraz sąsiadów.
-        heuristic_type (str): Typ używanej heurystyki ('nearest' lub 'average').
-        print_details (bool): Flaga określająca, czy szczegóły przetwarzania mają być drukowane.
-
-    Returns:
-        tuple: Najkrótsza trasa (lista miast) i całkowita odległość.
-    """
     priority_queue = []
     heapq.heappush(priority_queue, (0, starting_city, [starting_city], 0))
 
@@ -77,11 +44,10 @@ def a_star(starting_city, cities_dict, heuristic_type='nearest', print_details=F
             return_to_start_cost = euclidean_distance(cities_dict[current_city]["coordinates"], cities_dict[starting_city]["coordinates"])
             total_cost = current_cost + return_to_start_cost
             path.append(starting_city)
-            if print_details:
-                print(f"A* with {heuristic_type} heuristic has found the shortest path!")
-                print(f"Path: {path}")
-                print(f"Total distance: {total_cost}")
-            return path, total_cost
+            print("...")
+            print(f"a* with {heuristic_type} heuristic has found a valid path")
+            print(f"Path: {path}")
+            print(f"Whole distance: {total_cost}")
 
         current_city_coordinates = cities_dict[current_city]["coordinates"]
         for neighbor in cities_dict[current_city]["neighbors"]:
@@ -104,20 +70,4 @@ def a_star(starting_city, cities_dict, heuristic_type='nearest', print_details=F
                 if print_details:
                     print(f"Exploring city: {neighbor}, Estimated total cost: {estimated_total_cost}, New path: {new_path}")
 
-# Example usage:
-num_cities = 5
-problem_type = 'symmetrical'
-percent_of_connections = 100
-random_seed = 42
 
-cities_instance = allCities(num_cities, problem_type, percent_of_connections, random_seed)
-cities_dict = cities_instance.return_cities()
-
-# Display generated cities with coordinates and neighbors
-cities_instance.display_cities()
-
-starting_city = 'A'
-heuristic_type = 'nearest'  # or 'average'
-path, total_distance = a_star(starting_city, cities_dict, heuristic_type, print_details=True)
-print(f"Shortest path: {path}")
-print(f"Total distance: {total_distance}")
