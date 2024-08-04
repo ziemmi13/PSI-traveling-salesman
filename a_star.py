@@ -1,6 +1,5 @@
 import numpy as np
 from Cities import allCities
-
 import heapq
 import numpy as np
 
