@@ -1,9 +1,10 @@
 """
-Cities
+Cities and the euclidean distance between them
 """
 
 import random
 import math
+import numpy as np
 
 class allCities:
     def __init__(self, num_cities, problem_type, percent_of_connections, random_seed=None):
@@ -78,16 +79,14 @@ class allCities:
                     pass
                     
 
-# # Dane problemu 
-# num_cities = 5
-# problem_type = "asymmetrical"
-# starting_city = "A"
-# percent_connections = 100
-# random_seed = 254472
-
-# # Stworzenie sieci miast
-# cities = allCities(num_cities, problem_type, percent_of_connections = 80, random_seed=random_seed)
-# cities_dict = cities.return_cities()
-# cities.display_cities()
-
-# print(cities_dict)
+def euclidean_distance(city1_coordinates, city2_coordinates, problem_type):
+    if problem_type == "symmetrical":
+        return np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
+    elif problem_type == "asymmetrical":
+        dist = np.linalg.norm(np.array(city1_coordinates[:2]) - np.array(city2_coordinates[:2]))
+        height = city2_coordinates - city1_coordinates
+        if height > 0:
+            dist *= 1.1
+        elif height < 0:
+            dist *= 0.9
+        return dist

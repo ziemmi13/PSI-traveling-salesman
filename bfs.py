@@ -1,10 +1,7 @@
 from collections import deque
-import numpy as np
+from Cities import euclidean_distance
 
-def euclidean_distance(city1_coordinates, city2_coordinates):
-    return np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
-
-def bfs(starting_city, cities_dict, print_details):
+def bfs(starting_city, cities_dict, problem_type, print_details):
     all_paths = []
     queue = deque([(starting_city, [starting_city], 0)])  # Queue holds tuples of (current_city, path, total_distance)
     num_cities = len(cities_dict.keys())
@@ -24,7 +21,7 @@ def bfs(starting_city, cities_dict, print_details):
         for next_city in current_city_neighbors:
             if next_city not in path:
                 next_city_coordinates = cities_dict[next_city]["coordinates"]
-                distance_between_cities = euclidean_distance(current_city_coordinates, next_city_coordinates)
+                distance_between_cities = euclidean_distance(current_city_coordinates, next_city_coordinates, problem_type)
                 new_path = path + [next_city]
                 new_distance = current_distance + distance_between_cities
                 queue.append((next_city, new_path, new_distance))
@@ -37,7 +34,7 @@ def bfs(starting_city, cities_dict, print_details):
         if len(path) == num_cities:
             last_city_coordinates = cities_dict[path[-1]]["coordinates"]
             starting_city_coordinates = cities_dict[starting_city]["coordinates"]
-            distance_to_the_starting_city = euclidean_distance(last_city_coordinates, starting_city_coordinates)
+            distance_to_the_starting_city = euclidean_distance(last_city_coordinates, starting_city_coordinates,problem_type)
             complete_distance = current_distance + distance_to_the_starting_city
             complete_path = path + [starting_city]
             all_paths.append((complete_path, complete_distance))
@@ -51,8 +48,8 @@ def bfs(starting_city, cities_dict, print_details):
 
     return all_paths
 
-def bfs_find_best_path(cities_dict, starting_city, print_details=False):
-    all_paths = bfs(starting_city, cities_dict, print_details)
+def bfs_find_best_path(cities_dict, starting_city, problem_type, print_details=False):
+    all_paths = bfs(starting_city, cities_dict, problem_type, print_details)
     if not all_paths:
         return None, None
     best_path = min(all_paths, key=lambda x: x[1])

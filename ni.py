@@ -1,12 +1,6 @@
-import numpy as np
+from Cities import euclidean_distance
 
-# Funkcja do obliczania odległości euklidesowej między dwoma miastami
-def euclidean_distance(city1_coordinates, city2_coordinates):
-    dist = np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
-    return dist
-
-# Algorytm "Nearest Insertion"
-def ni(starting_city, cities_dict, print_details=True):
+def ni(starting_city, cities_dict, problem_type, print_details=True):
     unvisited_cities = set(cities_dict.keys())
     unvisited_cities.remove(starting_city)
     cycle = [starting_city, starting_city]
@@ -22,7 +16,7 @@ def ni(starting_city, cities_dict, print_details=True):
             city_coordinates = cities_dict[city]["coordinates"]
             for next_city in unvisited_cities:
                 next_city_coordinates = cities_dict[next_city]["coordinates"]
-                distance = euclidean_distance(city_coordinates, next_city_coordinates)
+                distance = euclidean_distance(city_coordinates, next_city_coordinates,problem_type)
                 if distance < min_distance:
                     min_distance = distance
                     nearest_city = next_city
@@ -34,9 +28,9 @@ def ni(starting_city, cities_dict, print_details=True):
         for i in range(len(cycle) - 1):
             current_city = cycle[i]
             next_city_in_cycle = cycle[i + 1]
-            increase = (euclidean_distance(cities_dict[current_city]["coordinates"], cities_dict[nearest_city]["coordinates"]) +
-                        euclidean_distance(cities_dict[nearest_city]["coordinates"], cities_dict[next_city_in_cycle]["coordinates"]) -
-                        euclidean_distance(cities_dict[current_city]["coordinates"], cities_dict[next_city_in_cycle]["coordinates"]))
+            increase = (euclidean_distance(cities_dict[current_city]["coordinates"], cities_dict[nearest_city]["coordinates"],problem_type) +
+                        euclidean_distance(cities_dict[nearest_city]["coordinates"], cities_dict[next_city_in_cycle]["coordinates"], problem_type) -
+                        euclidean_distance(cities_dict[current_city]["coordinates"], cities_dict[next_city_in_cycle]["coordinates"], problem_type))
             if increase < best_increase:
                 best_increase = increase
                 best_position = i + 1
@@ -53,7 +47,7 @@ def ni(starting_city, cities_dict, print_details=True):
     # Dodaj powrót do miasta początkowego
     starting_city_coordinates = cities_dict[starting_city]["coordinates"]
     last_city_coordinates = cities_dict[cycle[-2]]["coordinates"]
-    whole_distance += euclidean_distance(last_city_coordinates, starting_city_coordinates)
+    whole_distance += euclidean_distance(last_city_coordinates, starting_city_coordinates, problem_type)
 
     if print_details:
         print(f"\nReturning to starting city: {starting_city}")

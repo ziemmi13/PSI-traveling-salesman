@@ -1,12 +1,7 @@
-import numpy as np
-
-def euclidean_distance(city1_coordinates, city2_coordinates):
-    dist = np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
-    return dist
-
+from Cities import euclidean_distance
 
 def nn(current_city, cities_dict, visited_cities, 
-       whole_distance, starting_city, print_details):
+       whole_distance, starting_city, problem_type, print_details):
     visited_cities.append(current_city)
     current_city_coordinates = cities_dict[current_city]["coordinates"]
     current_city_neighbors = cities_dict[current_city]["neighbors"]
@@ -21,7 +16,7 @@ def nn(current_city, cities_dict, visited_cities,
     for next_city in current_city_neighbors:
         if next_city not in visited_cities:
             next_city_coordinates = cities_dict[next_city]["coordinates"]
-            distance_between_cities = euclidean_distance(current_city_coordinates, next_city_coordinates)
+            distance_between_cities = euclidean_distance(current_city_coordinates, next_city_coordinates, problem_type)
             distances.append([distance_between_cities, next_city])
 
     if distances: # when distances list is not empty
@@ -31,14 +26,14 @@ def nn(current_city, cities_dict, visited_cities,
         if print_details is True:
             print(f"Next city to visit: {closest_city} with distance {min_distance}")   
             print(f"Whole distance: {whole_distance}")
-        nn(closest_city, cities_dict, visited_cities, whole_distance, starting_city, print_details)
+        nn(closest_city, cities_dict, visited_cities, whole_distance, starting_city, problem_type, print_details)
     elif not distances: # if distances is empty
         last_city = current_city
         last_city_coordinates = current_city_coordinates
         starting_city_coordinates = cities_dict[starting_city]["coordinates"]
         # print(last_city_coordinates)
         # print(starting_city_coordinates)
-        distance_to_the_starting_city = euclidean_distance(current_city_coordinates, starting_city_coordinates)
+        distance_to_the_starting_city = euclidean_distance(current_city_coordinates, starting_city_coordinates, problem_type)
         whole_distance += distance_to_the_starting_city
 
         if print_details is True:
@@ -50,4 +45,6 @@ def nn(current_city, cities_dict, visited_cities,
         print("nn has found a valid path!")
         print(f"Path: {visited_cities}")
         print(f"Whole distance: {whole_distance}")
+
+        return visited_cities, whole_distance
 

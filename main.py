@@ -1,6 +1,6 @@
 from Cities import allCities
-from dfs import dfs, dfs_find_best_path
-from bfs import bfs, bfs_find_best_path
+from dfs import dfs_find_best_path
+from bfs import bfs_find_best_path
 from nn import nn
 from ni import ni
 from a_star import a_star
@@ -26,6 +26,7 @@ print("Starting DFS")
 dfs_start = time.time()
 dfs_best_path, dfs_best_distance = dfs_find_best_path(cities_dict=cities_dict, 
                                                       starting_city=starting_city, 
+                                                      problem_type=problem_type,
                                                       print_details=False)
 dfs_end = time.time()
 print("\nBest path found:")
@@ -40,7 +41,9 @@ print("Starting BFS")
 start_bfs = time.time()
 bfs_best_path, dfs_best_distance = bfs_find_best_path(cities_dict=cities_dict, 
                                                       starting_city=starting_city, 
-                                                      print_details=False)
+                                                      problem_type=problem_type,
+                                                      print_details=False
+                                                      )
 end_bfs = time.time()
 print("\nBest path found:")
 print(bfs_best_path)
@@ -54,7 +57,7 @@ print("Starting nn")
 start_nn = time.time()
 nn(current_city=starting_city, cities_dict=cities_dict, 
    visited_cities = [], whole_distance=0, starting_city=starting_city,
-   print_details=False)
+   problem_type=problem_type, print_details=False)
 end_nn = time.time()
 nn_time = end_nn - start_nn
 print(f"Valid path found in {nn_time:.10f}s")
@@ -63,20 +66,20 @@ print("")
 # Starting the ni
 print("Starting ni")
 start_ni = time.time()
-ni(starting_city, cities_dict, print_details=False)
+ni(starting_city, cities_dict, problem_type, print_details=False)
 end_ni = time.time()
 ni_time = end_ni - start_ni
 print(f"Valid path found in {ni_time:.10f}s")
 print("")
 
-# # Starting the a* - nearest
-# print("Starting a* with heuristic = 'nearest'")
-# start_a_star1 = time.time()
-# a_star(starting_city, cities_dict, heuristic_type = "nearest", print_details=False)
-# end_a_star1 = time.time()
-# a_star_time1 = end_a_star1 - start_a_star1
-# print(f"Valid path found in {a_star_time1:.10f}s")
-# print("")
+# Starting the a* - nearest
+print("Starting a* with heuristic = 'nearest'")
+start_a_star1 = time.time()
+a_star(starting_city, cities_dict, problem_type=problem_type, heuristic_type = "nearest", print_details=False)
+end_a_star1 = time.time()
+a_star_time1 = end_a_star1 - start_a_star1
+print(f"Valid path found in {a_star_time1:.10f}s")
+print("")
 
 # # Starting the a* - average
 # print("Starting a* with heuristic = 'average'")
