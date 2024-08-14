@@ -3,11 +3,14 @@ from Cities import euclidean_distance
 
 def bfs(starting_city, cities_dict, problem_type, print_details):
     all_paths = []
-    queue = deque([(starting_city, [starting_city], 0)])  # Queue holds tuples of (current_city, path, total_distance)
+    # initialize queue with (current_city, path, total_distance)
+    queue = deque([(starting_city, [starting_city], 0)])  
     num_cities = len(cities_dict.keys())
 
+    # while queue not empty
     while queue:
-        current_city, path, current_distance = queue.popleft()
+        # print(queue)
+        current_city, path, current_distance = queue.popleft() # pierwsze miasto z kolejki
         current_city_coordinates = cities_dict[current_city]["coordinates"]
         current_city_neighbors = cities_dict[current_city]["neighbors"]
 
@@ -29,8 +32,9 @@ def bfs(starting_city, cities_dict, problem_type, print_details):
                     print(f"Next city to visit: {next_city} with distance {distance_between_cities}")
                     print(f"New path: {new_path}")
                     print(f"New total distance: {new_distance}")
+                    print("")
 
-        # If we visited all cities, check if it's a valid complete path
+        # If all the cities are visited
         if len(path) == num_cities:
             last_city_coordinates = cities_dict[path[-1]]["coordinates"]
             starting_city_coordinates = cities_dict[starting_city]["coordinates"]
@@ -51,9 +55,7 @@ def bfs(starting_city, cities_dict, problem_type, print_details):
 def bfs_find_best_path(cities_dict, starting_city, problem_type, print_details=False):
     all_paths = bfs(starting_city, cities_dict, problem_type, print_details)
     if not all_paths:
+        print("bfs didn't find any paths")
         return None, None
     best_path = min(all_paths, key=lambda x: x[1])
     return best_path
-
-
-

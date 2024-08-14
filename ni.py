@@ -51,8 +51,9 @@ def ni(starting_city, cities_dict, problem_type, print_details=True):
 
     if print_details:
         print(f"\nReturning to starting city: {starting_city}")
-    
-    print("...")
-    print("ni has found a valid path")
-    print(f"Path: {cycle}")
-    print(f"Whole distance: {whole_distance}")
+        print("...")
+        print("ni has found a valid path")
+        print(f"Path: {cycle}")
+        print(f"Whole distance: {whole_distance}")
+
+    return cycle, whole_distance

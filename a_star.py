@@ -74,9 +74,10 @@ def a_star(starting_city, cities_dict, problem_type, heuristic_type='nearest', p
                 if print_details:
                     print(f"Exploring city: {neighbor}, Estimated total cost: {estimated_total_cost}, New path: {new_path}")
 
-    print("...")
-    print(f"a* with {heuristic_type} heuristic has found a valid path!")
-    print(f"Path: {best_path}")
-    print(f"Whole distance: {best_cost}")
+    if print_details:
+        print("...")
+        print(f"a* with {heuristic_type} heuristic has found a valid path!")
+        print(f"Path: {best_path}")
+        print(f"Whole distance: {best_cost}")
 
-    return best_path, best_cost
+    return best_path, best_cost, heuristic_type

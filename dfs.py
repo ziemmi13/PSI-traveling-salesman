@@ -18,7 +18,7 @@ def dfs(current_city, cities_dict, visited_cities, whole_distance, starting_city
             distance_between_cities = euclidean_distance(current_city_coordinates, next_city_coordinates, problem_type)
             dfs(next_city, cities_dict, visited_cities[:], whole_distance + distance_between_cities, starting_city, problem_type, print_details, all_paths)
 
-    # Condition to check if all cities are visited
+    # if all the cities are visited
     if len(visited_cities) == num_cities:
         last_city_coordinates = current_city_coordinates
         starting_city_coordinates = cities_dict[starting_city]["coordinates"]
@@ -47,6 +47,7 @@ def dfs_find_best_path(cities_dict, starting_city,problem_type, print_details):
     all_paths = []
     dfs(starting_city, cities_dict, [], 0, starting_city, problem_type, print_details, all_paths)
     if not all_paths:
+        print("DFS didn't find any paths")
         return None, None
     best_path = min(all_paths, key=lambda x: x[1])
     return best_path

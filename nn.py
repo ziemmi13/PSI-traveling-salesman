@@ -1,7 +1,6 @@
 from Cities import euclidean_distance
 
-def nn(current_city, cities_dict, visited_cities, 
-       whole_distance, starting_city, problem_type, print_details):
+def nn(current_city, cities_dict, visited_cities, whole_distance, starting_city, problem_type, print_details):
     visited_cities.append(current_city)
     current_city_coordinates = cities_dict[current_city]["coordinates"]
     current_city_neighbors = cities_dict[current_city]["neighbors"]
@@ -26,25 +25,27 @@ def nn(current_city, cities_dict, visited_cities,
         if print_details is True:
             print(f"Next city to visit: {closest_city} with distance {min_distance}")   
             print(f"Whole distance: {whole_distance}")
-        nn(closest_city, cities_dict, visited_cities, whole_distance, starting_city, problem_type, print_details)
-    elif not distances: # if distances is empty
+        return nn(closest_city, cities_dict, visited_cities, whole_distance, starting_city, problem_type, print_details)
+    
+    else: # if distances is empty
         last_city = current_city
         last_city_coordinates = current_city_coordinates
         starting_city_coordinates = cities_dict[starting_city]["coordinates"]
         # print(last_city_coordinates)
         # print(starting_city_coordinates)
-        distance_to_the_starting_city = euclidean_distance(current_city_coordinates, starting_city_coordinates, problem_type)
+        distance_to_the_starting_city = euclidean_distance(last_city_coordinates, starting_city_coordinates, problem_type)
         whole_distance += distance_to_the_starting_city
 
         if print_details is True:
             print(f"Coming back to start city: {starting_city} with distance {distance_to_the_starting_city}")
             print(f"Whole distance: {whole_distance}")
+            visited_cities.append(starting_city)
+            print("...")
+            print("nn has found a valid path!")
+            print(f"Path: {visited_cities}")
+            print(f"Whole distance: {whole_distance}")
         
-        visited_cities.append(starting_city)
-        print("...")
-        print("nn has found a valid path!")
-        print(f"Path: {visited_cities}")
-        print(f"Whole distance: {whole_distance}")
-
         return visited_cities, whole_distance
+
+        
 

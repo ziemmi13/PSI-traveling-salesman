@@ -84,7 +84,7 @@ def euclidean_distance(city1_coordinates, city2_coordinates, problem_type):
         return np.linalg.norm(np.array(city1_coordinates) - np.array(city2_coordinates))
     elif problem_type == "asymmetrical":
         dist = np.linalg.norm(np.array(city1_coordinates[:2]) - np.array(city2_coordinates[:2]))
-        height = city2_coordinates - city1_coordinates
+        height = city2_coordinates[2] - city1_coordinates[2]
         if height > 0:
             dist *= 1.1
         elif height < 0:
