@@ -9,7 +9,9 @@ class AntCities(allCities):
 
     def initialize_pheromone(self):
         n = len(self.cities)
-        self.pheromone = np.ones((n, n)) * 1e-10  # Initialize pheromone to a small value for all city pairs (0 caused errors)
+        # Initialize pheromone to a small value for all city pairs (0 caused errors)
+        self.pheromone = np.ones((n, n)) * 1e-10  
+        # Edges with connections get a 1
         for i in range(n):
             city1 = chr(i + ord("A"))
             for j in range(n):
@@ -26,8 +28,10 @@ class AntCities(allCities):
 
         for path, path_length in zip(paths, path_lengths):
             for i in range(len(path)):
+                # change cities names to indexes of pheromone matrix
                 city1_idx = ord(path[i]) - 65
                 city2_idx = ord(path[(i + 1) % len(path)]) - 65
+                # the smallest the path_lenght the biggest the pheromoe increse
                 self.pheromone[city1_idx, city2_idx] += Q / path_length
 
     def get_pheromone(self, city1_idx, city2_idx):
@@ -60,6 +64,7 @@ class AntCities(allCities):
 
                 while len(path) < len(self.cities):
                     unvisited = [city for city in self.cities.keys() if not visited[ord(city) - 65]]
+                    #probabilities of choosing the next city
                     probabilities = np.zeros(len(unvisited))
 
                     for i, unvisited_city in enumerate(unvisited):
@@ -67,11 +72,16 @@ class AntCities(allCities):
                         next_city_idx = ord(unvisited_city) - 65
                         pheromone_level = self.get_pheromone(city_idx, next_city_idx)
                         distance = self.get_distance(current_city, unvisited_city)
+                        # alpha - weight of pheromone_level
+                        # beta - weight of distance
                         probabilities[i] = (pheromone_level ** alpha) / (distance ** beta)
                     
+                    # normalizing so that the sum of probabilities == 1
                     probabilities /= np.sum(probabilities)
+                    # choosing the next city based on probabilities
                     next_city = np.random.choice(unvisited, p=probabilities)
                     
+                    # actualising path, visited and currrent city
                     path.append(next_city)
                     path_length += self.get_distance(current_city, next_city)
                     visited[ord(next_city) - 65] = True
@@ -79,14 +89,17 @@ class AntCities(allCities):
 
                 # Add return distance to the starting city
                 path_length += self.get_distance(path[-1], starting_city)
-                path.append(starting_city)  # Ensure the path includes the starting city at the end
+                # Adding back the starting city at the end
+                path.append(starting_city)  
                 paths.append(path)
                 path_lengths.append(path_length)
 
+                # actualising best path
                 if path_length < best_path_length:
                     best_path = path
                     best_path_length = path_length
 
+            # updating pheromone based on actualised paths
             self.update_pheromone(paths, path_lengths, Q, evaporation_rate)
 
         return best_path, best_path_length
