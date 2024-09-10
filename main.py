@@ -9,7 +9,7 @@ from aco import AntCities
 import pandas as pd
 
 # Dane problemu 
-num_cities = 6 #10 is where my computer starts to hate me
+num_cities = 6 
 problem_type = "symmetrical" # or 'asymmetrical'
 starting_city = "A"
 percent_connections = 100

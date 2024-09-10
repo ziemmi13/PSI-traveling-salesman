@@ -1,31 +1,38 @@
 # Example usage
 from Cities import allCities
 from aco import AntCities
+import time
+from a_star import a_star
 
-# Create the cities
-num_cities = 5
-problem_type = "symmetrical"  # Change to "asymmetrical" if needed
-percent_of_connections = 80
-random_seed = 42
 
-# Instantiate AntCities
-ant_cities = AntCities(num_cities, problem_type, percent_of_connections, random_seed)
+# Dane problemu 
+num_cities = 5 
+problem_type = "symmetrical" # or 'asymmetrical'
+starting_city = "A"
+percent_connections = 100
+random_seed = 254472
 
-# Initialize cities and neighbors
-cities = ant_cities.return_cities()
-# ant_cities.display_cities()
 
-# Parameters for ACO
-n_ants = 100
-n_iterations = 100
-alpha = 1.0  # Influence of pheromone
-beta = 2.0   # Influence of distance
-evaporation_rate = 0.5
-Q = 100
+# Creating cities
+cities = allCities(num_cities, problem_type, 
+                   percent_of_connections = percent_connections, 
+                   random_seed=random_seed)
+cities_dict = cities.return_cities()
+cities.display_cities()
 
-# Run ACO
-path, path_length = ant_cities.ant_colony_optimization(n_ants, n_iterations, alpha, beta, evaporation_rate, Q, starting_city="E")
 
-print(f"ACO has found a valid path:")
-print(f"Path: {path}")
-print(f"Path cost: {path_length}")
+# Starting the a* - nearest
+print("Starting a* with heuristic = 'nearest'")
+start_a_star1 = time.time()
+a_star_path1, astar_cost1, heuristic_type1 = a_star(starting_city, 
+                                              cities_dict, 
+                                              problem_type=problem_type, 
+                                              heuristic_type = "nearest", 
+                                              print_details=False)
+end_a_star1 = time.time()
+a_star_time1 = end_a_star1 - start_a_star1
+print("\nValid path found:")
+print(a_star_path1)
+print(f"With a total distance of: {astar_cost1}")
+print(f"Valid path found in {a_star_time1:.10f}s")
+print("")
